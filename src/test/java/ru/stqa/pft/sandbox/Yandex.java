@@ -2,62 +2,71 @@ package ru.stqa.pft.sandbox;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-//import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.net.Urls;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.BeforeMethod;
-import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.*;
-//import org.junit.Test;
 import org.testng.annotations.Test;
 
-
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.concurrent.TimeUnit;
+import java.util.Random;
+
 
 public class Yandex {
     WebDriver driver;
-//    ChromeDriver driver;
 
     @BeforeMethod
     public void setUp() throws MalformedURLException {
-//        driver = new ChromeDriver();
-//        driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
         System.setProperty("webdriver.chrome.driver", "C:/Tools/chromedriver_76/chromedriver.exe");
         driver = new ChromeDriver();
     }
 
     @Test
     public void testAddProject() throws InterruptedException {
-        driver.get("https://chlist.sitechco.ru");
-        driver.findElement(By.id ("user_auth_email")).click();
-        driver.findElement(By.id ("user_auth_email")).clear();
-        driver.findElement(By.id ("user_auth_email")).sendKeys("y23jppou2inx@mail.ru");
-        driver.findElement(By.id("user_auth_password")).click();
-        driver.findElement(By.id("user_auth_password")).clear();
-        driver.findElement(By.id("user_auth_password")).sendKeys("10405020");
-        driver.findElement(By.xpath("/html/body/div/fieldset/div[2]/form/div/input")).click();
-        Thread.sleep(5000);  // Let the user actually see something!
+        String rndString = getRandomString(6);
+        openUrl("https://chlist.sitechco.ru");
+        fillField("user_auth_email", "y23jppou2inx@mail.ru");
+        fillField("user_auth_password", "10405020");
+        buttonXpathClick("/html/body/div/fieldset/div[2]/form/div/input");
+        Thread.sleep(2000);  // Let the user actually see something!
+        buttonIdClick("span_add_ch_button");
+        fillField("popup-cl-name", rndString);
+        fillField("popup-cl-abbr", rndString);
+        buttonXpathClick("//*[@id=\"add_checklist_form\"]/div/div[2]/div[6]/button");
+        buttonXpathClick("//*[@id=\"status-panel\"]/span/a[2]");
     }
 
-        public void tierDown(){
-            driver.quit();
-        }
+    private void buttonIdClick(String span_add_ch_button) {
+        driver.findElement(By.id(span_add_ch_button)).click();
+    }
 
-//    @Test
-    public void testGoogleSearch() throws InterruptedException {
-        // Optional. If not specified, WebDriver searches the PATH for chromedriver.
-        System.setProperty("webdriver.chrome.driver", "C:/Tools/chromedriver_76/chromedriver.exe");
+    private void buttonXpathClick(String xpath) {
+        driver.findElement(By.xpath(xpath)).click();
+    }
 
-        WebDriver driver = new ChromeDriver();
-        driver.get("http://www.google.com/");
-        Thread.sleep(5000);  // Let the user actually see something!
-        WebElement searchBox = driver.findElement(By.name("q"));
-        searchBox.sendKeys("ChromeDriver");
-        searchBox.submit();
+    private void fillField(String id, String value) {
+        driver.findElement(By.id(id)).click();
+        driver.findElement(By.id(id)).sendKeys(value);
+    }
+
+    private void openUrl(String url) {
+        driver.get(url);
+    }
+
+    //    @AfterMethod
+    public void tierDown() throws InterruptedException {
+//        driver.findElement(By.id("quit")).click();
         Thread.sleep(5000);  // Let the user actually see something!
         driver.quit();
+    }
+
+
+    public static String getRandomString(int stringLength){
+        String charSet = "abcdefghijklmnopqrstuvwxyz";
+        Random rnd = new Random();
+        char[] text = new char[stringLength];
+        for (int i = 0; i < stringLength; i++)
+        {
+            text[i] = charSet.charAt(rnd.nextInt(charSet.length()));
+        }
+        return new String(text);
     }
 }
