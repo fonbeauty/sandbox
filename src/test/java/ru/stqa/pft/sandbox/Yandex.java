@@ -22,34 +22,22 @@ public class Yandex {
     @Test
     public void testAddProject() throws InterruptedException {
         String rndString = getRandomString(6);
-        openUrl("https://chlist.sitechco.ru");
-        fillField("user_auth_email", "y23jppou2inx@mail.ru");
-        fillField("user_auth_password", "10405020");
-        buttonXpathClick("/html/body/div/fieldset/div[2]/form/div/input");
+        driver.get("https://chlist.sitechco.ru");
+        driver.findElement(By.id("user_auth_email")).click();
+        driver.findElement(By.id("user_auth_email")).sendKeys("y23jppou2inx@mail.ru");
+        driver.findElement(By.id("user_auth_password")).click();
+        driver.findElement(By.id("user_auth_password")).sendKeys("10405020");
+        driver.findElement(By.xpath("/html/body/div/fieldset/div[2]/form/div/input")).click();
         Thread.sleep(2000);  // Let the user actually see something!
-        buttonIdClick("span_add_ch_button");
-        fillField("popup-cl-name", rndString);
-        fillField("popup-cl-abbr", rndString);
-        buttonXpathClick("//*[@id=\"add_checklist_form\"]/div/div[2]/div[6]/button");
-        buttonXpathClick("//*[@id=\"status-panel\"]/span/a[2]");
+        driver.findElement(By.id("span_add_ch_button")).click();
+        driver.findElement(By.id("popup-cl-name")).click();
+        driver.findElement(By.id("popup-cl-name")).sendKeys(rndString);
+        driver.findElement(By.id("popup-cl-abbr")).click();
+        driver.findElement(By.id("popup-cl-abbr")).sendKeys(rndString);
+        driver.findElement(By.xpath("//*[@id=\"add_checklist_form\"]/div/div[2]/div[6]/button")).click();
+        driver.findElement(By.xpath("//*[@id=\"status-panel\"]/span/a[2]")).click();
     }
 
-    private void buttonIdClick(String span_add_ch_button) {
-        driver.findElement(By.id(span_add_ch_button)).click();
-    }
-
-    private void buttonXpathClick(String xpath) {
-        driver.findElement(By.xpath(xpath)).click();
-    }
-
-    private void fillField(String id, String value) {
-        driver.findElement(By.id(id)).click();
-        driver.findElement(By.id(id)).sendKeys(value);
-    }
-
-    private void openUrl(String url) {
-        driver.get(url);
-    }
 
     //    @AfterMethod
     public void tierDown() throws InterruptedException {
