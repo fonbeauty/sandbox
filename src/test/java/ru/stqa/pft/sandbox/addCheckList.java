@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 import java.util.Random;
 
 
-public class Yandex {
+public class addCheckList {
     WebDriver driver;
 
     @BeforeMethod
